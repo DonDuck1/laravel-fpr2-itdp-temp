@@ -9,6 +9,18 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Organisation -->
+        <div class="mt-4">
+            <x-input-label for="organisation" :value="__('Organisation')" />
+            <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="organisation" name="organisation">
+                <option value="" selected disabled hidden>-- Choose an organisation --</option>
+                @foreach($organisations as $organisation)
+                    <option value="{{ $organisation->name }}">{{ $organisation->name }}</option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('organisation')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />

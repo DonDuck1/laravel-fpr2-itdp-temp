@@ -16,6 +16,29 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                @can('viewAny', \App\Models\Organisation::class)
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('organisations.index')" :active="request()->routeIs('organisations.index')">
+                            {{ __('All organisations') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
+                @if(auth()->user()->organisation_id !== null)
+                    @can('view', App\Models\Organisation::where('id', '=', auth()->user()->organisation_id)->first())
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <x-nav-link :href="route('organisations.show', App\Models\Organisation::where('id', '=', auth()->user()->organisation_id)->first()->id)" :active="request()->routeIs('organisations.show', App\Models\Organisation::where('id', '=', auth()->user()->organisation_id)->first()->id)">
+                                {{ __('My organisation') }}
+                            </x-nav-link>
+                        </div>
+                    @endcan
+                @endif
+                @can('viewAny', \App\Models\Department::class)
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('departments.index')" :active="request()->routeIs('departments.index')">
+                            {{ __('All departments') }}
+                        </x-nav-link>
+                    </div>
+                @endcan
             </div>
 
             <!-- Settings Dropdown -->

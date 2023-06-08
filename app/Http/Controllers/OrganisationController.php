@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Organisation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrganisationController extends Controller
 {
@@ -12,7 +13,10 @@ class OrganisationController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny', Organisation::class);
+        $organisations = Organisation::orderBy('id', 'asc')->get();
+
+        return view('organisations.index', compact('organisations'));
     }
 
     /**
@@ -20,7 +24,9 @@ class OrganisationController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', Organisation::class);
+
+        return view('organisations.create');
     }
 
     /**
@@ -28,7 +34,19 @@ class OrganisationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Organisation::class);
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'active' => ['required', 'boolean'],
+        ]);
+
+        Organisation::create([
+            'name' => $request->name,
+            'active' => $request->active,
+        ]);
+
+        return redirect(route('organisations.index'));
     }
 
     /**
@@ -36,7 +54,10 @@ class OrganisationController extends Controller
      */
     public function show(Organisation $organisation)
     {
-        //
+        $this->authorize('view', $organisation);
+        $departments = DB::table('departments')->where('organisation_id', $organisation->id)->get();
+
+        return view('organisations.show', compact('organisation', 'departments'));
     }
 
     /**
@@ -44,7 +65,9 @@ class OrganisationController extends Controller
      */
     public function edit(Organisation $organisation)
     {
-        //
+        $this->authorize('update', $organisation);
+
+        return view('organisations.edit', compact('organisation'));
     }
 
     /**
@@ -52,7 +75,19 @@ class OrganisationController extends Controller
      */
     public function update(Request $request, Organisation $organisation)
     {
-        //
+        $this->authorize('update', $organisation);
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'active' => ['required', 'boolean'],
+        ]);
+
+        $organisation->update([
+            'name' => $request->name,
+            'active' => $request->active,
+        ]);
+
+        return redirect(route('organisations.show', $organisation->id));
     }
 
     /**
@@ -60,6 +95,10 @@ class OrganisationController extends Controller
      */
     public function destroy(Organisation $organisation)
     {
-        //
+        $this->authorize('delete', $organisation);
+
+        $organisation->delete();
+
+        return redirect(route('organisations.index'));
     }
 }

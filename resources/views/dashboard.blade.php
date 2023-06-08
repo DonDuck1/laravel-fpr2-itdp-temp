@@ -14,41 +14,4 @@
             </div>
         </div>
     </div>
-    <?php
-        $users = App\Models\User::get();
-        $organisations = App\Models\Organisation::get();
-        $departments = App\Models\Department::get();
-
-        $user = Illuminate\Support\Facades\Auth::user();
-        $organisationOfCurrentUser = App\Models\Organisation::where('id', '=', $user->organisation_id)->first();
-        $departmentsOfCurrentUser = App\Models\Department::where('organisation_id', '=', $organisationOfCurrentUser->id)->get();
-    ?>
-
-    <p>User: {{ $user }}:</p>
-    <p>Organisation of user: {{ $organisationOfCurrentUser }}</p>
-    <p>Departments of organisation of user:</p>
-    @foreach($departmentsOfCurrentUser as $department)
-        <p>{{ $department }}</p>
-    @endforeach
-    <br>
-    <br>
-    <br>
-    @foreach($users as $user)
-        <p>{{ $user }}</p>
-        <br>
-    @endforeach
-    <br>
-    <br>
-    <br>
-    @foreach($organisations as $organisations)
-        <p>{{ $organisations }}</p>
-        <br>
-    @endforeach
-    <br>
-    <br>
-    <br>
-    @foreach($departments as $department)
-        <p>{{ $department }}</p>
-        <br>
-    @endforeach
 </x-app-layout>
