@@ -1,0 +1,30 @@
+version: '3'
+services:
+  itdp-security-app:
+    build: ./
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8088:80"
+    networks:
+      - itdp-security-app-network
+    depends_on:
+      - mysql-itdp-security-app
+  mysql-itdp-security-app:
+    build: ./database
+    environment:
+      MYSQL_DATABASE: "itdp-security-app-database"
+    networks:
+      - itdp-security-app-network
+  phpmyadmin-itdp-security-app:
+    build: ./phpmyadmin
+    ports:
+      - "8087:80"
+    networks:
+      - itdp-security-app-network
+    depends_on:
+      - mysql-itdp-security-app
+networks:
+  itdp-security-app-network:
+    driver: bridge
+
