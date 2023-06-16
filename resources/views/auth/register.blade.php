@@ -15,7 +15,7 @@
             <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="organisation" name="organisation">
                 <option value="" selected disabled hidden>-- Choose an organisation --</option>
                 @foreach($organisations as $organisation)
-                    <option value="{{ $organisation->name }}">{{ $organisation->name }}</option>
+                    <option {{ old('organisation') == $organisation->name ? "selected" : "" }} value="{{ $organisation->name }}">{{ $organisation->name }}</option>
                 @endforeach
             </select>
             <x-input-error :messages="$errors->get('organisation')" class="mt-2" />
