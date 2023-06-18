@@ -71,6 +71,7 @@ class DepartmentsController extends Controller
      */
     public function show(Department $department)
     {
+        $this->authorize('view', $department);
         $organisation = Organisation::where('id', '=', $department->organisation_id)->first();
 
         return view('departments.show', compact('department', 'organisation'));

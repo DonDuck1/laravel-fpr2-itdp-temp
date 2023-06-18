@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'John',
                 'email' => 'john@john.com',
-                'password' => Hash::make('1234'),
+                'password' => Hash::make('DagobertDuck1234!'),
                 'organisation_id' => Organisation::where('name', '=', "John's Space Agency")->first()->id,
                 'role_id' => Role::IS_MANAGER,
             ]
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Jane',
                 'email' => 'jane@jane.com',
-                'password' => Hash::make('1234'),
+                'password' => Hash::make('KnappeKitty1234!'),
                 'organisation_id' => Organisation::where('name', '=', "Jane's Commercial Space Flights")->first()->id,
                 'role_id' => Role::IS_MANAGER,
             ]
@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'John Jr.',
                 'email' => 'johnjr@john.com',
-                'password' => Hash::make('1234'),
+                'password' => Hash::make('Kwik,KwekEnKwak1234!'),
                 'organisation_id' => Organisation::where('name', '=', "John's Space Agency")->first()->id,
                 'role_id' => Role::IS_USER,
             ]
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Jane Jr.',
                 'email' => 'janejr@jane.com',
-                'password' => Hash::make('1234'),
+                'password' => Hash::make('Floortje1234!'),
                 'organisation_id' => Organisation::where('name', '=', "Jane's Commercial Space Flights")->first()->id,
                 'role_id' => Role::IS_USER,
             ]
