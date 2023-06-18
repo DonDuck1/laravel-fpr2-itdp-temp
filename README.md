@@ -1,66 +1,300 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Security Opdracht 3 Joan Maljers
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Auteurs
+* **Joan Maljers** - *De site laten werken, inclusief IDOR toevoegen* - [Joan Maljers](https://github.com/DonDuck1)
 
-## About Laravel
+## Instructies
+Snooping en session hijacking worden voorkomen door gebruik te maken van HTTPS en TLS (oftewel er wordt gebruikgemaakt van een 'SSL Certificate')
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Er zijn 3 rollen: 'Administrator', 'Manager' en 'User'. De rechten van elke gebruiker (zoals het zou moeten zijn):
+Iemand met de rol 'Administrator' heeft het recht om:
+- Nieuwe gebruikers te registreren. Ze kunnen echter niet nieuwe gebruikers de rol 'Administrator' geven, dat zou moeten via de database. Ook kunnen ze accounts niet aanpassen na aanmaak (behalve via de database) en kunnen ze ze niet verwijderen (behalve via de database).
+- Alle organisaties bekijken, nieuwe organisaties aan te maken, bestaande organisaties bewerken en verwijderen
+- Alle afdelingen bekijken, nieuwe afdelingen maken, bestaande afdelingen bewerken en verwijderen
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Iemand met de rol 'Manager' heeft het recht om:
+- De bestaande organisatie waar hij bij hoort bekijken en bewerken.
+- De bestaande afdelingen die horen bij zijn organisatie bekijken, nieuwe afdelingen die bij zijn organisatie horen maken, bestaande afdelingen die bij zijn organisatie horen wijzigen en verwijderen.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Iemand met de rol 'User' heeft het recht om:
+- De bestaande organisatie waar hij bij hoort bekijken.
+- De bestaande afdelingen die horen bij zijn organisatie bekijken.
 
-## Learning Laravel
+Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net vers is gemigrate en geseed, en wat de links inhouden en voor wie ze beschikbaar zijn. '...' is de link naar de hoofdpagina/ welkomspagina van mijn site. Om IDOR aan te tonen kun je deze links in de zoekbalk van de browser plakken wanneer je bent ingelogd als verschillende gebruikers.
+<br>
+<br>
+.../login -> Dient om gebruikers in te laten loggen. Beschikbaar voor iedereen.
+<br>
+<br>
+.../ -> hoofdpagina/ welkomspagina. Beschikbaar voor iedereen.
+<br>
+<br>
+.../register -> registreren. Beschikbaar voor administrator.
+<br>
+<br>
+.../profile -> wijzig informatie over eigen account. Beschikbaar voor iedereen voor hun eigen account. Dit is niet aangepast en is volledig zoals laravel breeze het voor me had gemaakt, dus zal ik hier geen manier voor geven om proberen om proberen andere mensen hun accounts te wijzigen of verwijderen (omdat hier ook sprake is van een indirecte verwijzing, er staat geen id/ uuid van het profiel in de URL, zou dit erg moeilijk zijn).
+<br>
+<br>
+.../dashboard -> dashboard. Beschikbaar voor iedereen.
+<br>
+<br>
+.../organisations -> tabel met alle organisaties. Beschikbaar voor administrator.
+<br>
+<br>
+.../organisations/280ac77a-9bca-4d9c-aa0c-cbc6f39b6717 -> informatie over organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van deze organisatie en user van deze organisatie.
+<br>
+<br>
+.../organisations/280ac77a-9bca-4d9c-aa0c-cbc6f39b6717/edit -> wijzig informatie over organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van deze organisatie.
+<br>
+<br>
+.../organisations/8a9aebaf-f596-475b-94aa-7bc43af5e4e9 -> informatie over organisatie 'Jane's Commercial Space Flights'. Beschikbaar voor administrator, manager van deze organisatie en user van deze organisatie.
+<br>
+<br>
+.../organisations/8a9aebaf-f596-475b-94aa-7bc43af5e4e9/edit -> wijzig informatie over organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van deze organisatie.
+<br>
+<br>
+.../departments -> tabel met alle afdelingen. Beschikbaar voor administrator.
+<br>
+<br>
+.../departments/02a11954-5a03-4c26-9bd1-21e06cf27d1b -> informatie over afdeling 'John's Alien Observers' van organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort en user van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/02a11954-5a03-4c26-9bd1-21e06cf27d1b/edit -> wijzig informatie over afdeling 'John's Alien Observers' van organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/349a5e02-10fc-4bbc-b583-c9b59095b2ce -> informatie over afdeling 'Jane's Safety Videos' van organisatie 'Jane's Commercial Space Flights'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort en user van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/349a5e02-10fc-4bbc-b583-c9b59095b2ce/edit -> wijzig informatie over afdeling 'Jane's Safety Videos' van organisatie 'Jane's Commercial Space Flights'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/5ad872f5-1a85-42e6-a4fc-6788227c6a55 -> informatie over afdeling 'Jane's Spicy Engines' van organisatie 'Jane's Commercial Space Flights'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort en user van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/5ad872f5-1a85-42e6-a4fc-6788227c6a55/edit -> wijzig informatie over afdeling 'Jane's Spicy Engines' van organisatie 'Jane's Commercial Space Flights'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/67392d6a-d4ad-4bdd-bb67-c4880e57652d -> informatie over afdeling 'John's Astronaut Training' van organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort en user van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/67392d6a-d4ad-4bdd-bb67-c4880e57652d/edit -> wijzig informatie over afdeling 'John's Astronaut Training' van organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/8a6ce960-4860-428c-8d78-38fa4013ef24 -> informatie over afdeling 'John's Rocket R&D' van organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort en user van de organisatie waar deze afdeling bij hoort.
+<br>
+<br>
+.../departments/8a6ce960-4860-428c-8d78-38fa4013ef24/edit -> wijzig informatie over afdeling 'John's Rocket R&D' van organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# Om de 'store', 'update' en 'delete' routes proberen te bereiken kun je respectievelijk de volgende code toevoegen aan de site via de webeditor. Vergeet daarbij niet de '...' en wat tussen {{}} staat te vervangen met de relevante data.
+# 'Store' user (alleen administrator mag nieuwe gebruikers maken via .../register):
+```
+<form method="POST" action=".../register">
+    <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
+    <!-- Name -->
+    <div>
+        <label class="block font-medium text-sm text-gray-700" for="name">Name</label>
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="name" type="text" name="name" required="required" autofocus="autofocus" autocomplete="name">
+    </div>
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    <!-- Organisation -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="organisation">Organisation</label>
+        <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="organisation" name="organisation">
+            <option value="" selected="" disabled="" hidden="">-- Choose an organisation --</option>
+            <option value="John's Space Agency">John's Space Agency</option>
+            <option value="Jane's Commercial Space Flights">Jane's Commercial Space Flights</option>
+        </select>
+    </div>
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    <!-- Role -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="role">Role</label>
+        <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="role" name="role">
+            <option value="" selected="" disabled="" hidden="">-- Choose a role --</option>
+            <option value="User">User</option>
+            <option value="Manager">Manager</option>
+            <option value="Administrator">Administrator</option> <!-- Dit staat in de normale register route niet en is via de backend onmogelijk te verwerken -->
+        </select>
+    </div>
 
-## Laravel Sponsors
+    <!-- Email Address -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="email">Email</label>
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="email" type="email" name="email" required="required" autocomplete="username">
+    </div>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    <!-- Password -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="password">Password</label>
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="password" type="password" name="password" required="required" autocomplete="new-password">
+    </div>
 
-### Premium Partners
+    <!-- Confirm Password -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="password_confirmation">Confirm Password</label>
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="password_confirmation" type="password" name="password_confirmation" required="required" autocomplete="new-password">
+    </div>
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+    <div class="flex items-center justify-end mt-4">
+        <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-4">Register</button>
+    </div>
+</form>
+```
+# 'Store' organisation (alleen administrator):
+```
+<form method="POST" action=".../organisations">
+    <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
+    <div class="field">
+        <label class="label" for="name">Organisation name</label>
+        <div class="control">
+            <input class="input" type="text" name="name" id="name" size="80" value="">
+        </div>
+    </div>
 
-## Contributing
+    <div class="field">
+        <label class="label" for="active">Active</label>
+        <div class="control">
+            <select id="active" name="active">
+                <option value="1">True</option>
+                <option value="0">False</option>
+            </select>
+        </div>
+    </div>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    <div class="field is-grouped">
+        <div class="control">
+            <button class="submit_button_blogs" type="submit">Submit</button>
+        </div>
+    </div>
+</form>
+```
 
-## Code of Conduct
+# 'Update' organisation (adminstrator, manager kan alleen van zijn eigen organisatie info wijzigen):
+```
+<form method="POST" action=".../organisations/{{ organisation uuid }}">
+    <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
+    <input type="hidden" name="_method" value="PUT">            
+    <div class="field">
+        <label class="label" for="name">Organisation Name</label>
+        <div class="control">
+            <input class="input" type="text" name="name" id="name" value="Jane's Commercial Space Flights" size="80">
+        </div>
+    </div>
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    <div class="field">
+        <label class="label" for="active">Active</label>
+        <div class="control">
+            <select id="active" name="active">
+                <option value="1" selected="">True</option>
+                <option value="0">False</option>
+            </select>
+        </div>
+    </div>
 
-## Security Vulnerabilities
+    <div class="field is-grouped">
+        <div class="control">
+            <button class="submit_button_blogs" type="submit">Submit</button>
+        </div>
+    </div>
+</form>
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 'Delete' organisation (alleen administrator):
+```
+<form method="POST" action=".../organisations/{{ organisation uuid }}">
+    <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit">Delete</button>
+</form>
+```
 
-## License
+# 'Store' department (adminstrator, manager kan alleen afdelingen bij eigen organisatie toevoegen):
+```
+<form method="POST" action=".../public/departments">
+    <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
+    <div class="field">
+        <label class="label" for="name">Department name</label>
+        <div class="control">
+            <input class="input" type="text" name="name" id="name" size="80" value="">
+        </div>
+    </div>
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    <div class="field">
+        <label class="label" for="active">Active</label>
+        <div class="control">
+            <select id="active" name="active">
+                <option value="1">True</option>
+                <option value="0">False</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="organisation">Organisation</label>
+        <div class="control">
+            <select id="organisation" name="organisation">
+                <option value="" selected="" disabled="" hidden="">-- Choose an organisation --</option>
+                <option value="John's Space Agency">John's Space Agency</option>
+                <option value="Jane's Commercial Space Flights">Jane's Commercial Space Flights</option>
+            </select>
+        </div>
+    </div>
+            
+
+    <div class="field is-grouped">
+        <div class="control">
+            <button class="submit_button_blogs" type="submit">Submit</button>
+        </div>
+    </div>
+</form>
+```
+
+# 'Update' department (adminstrator, manager kan alleen afdelingen van eigen organisatie wijzigen):
+```
+<form method="POST" action=".../departments/{{ department uuid }}">
+    <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
+    <input type="hidden" name="_method" value="PUT">            
+        <div class="field">
+        <label class="label" for="name">Department Name</label>
+        <div class="control">
+            <input class="input" type="text" name="name" id="name" value="John's Alien Observers" size="80">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="active">Active</label>
+        <div class="control">
+            <select id="active" name="active">
+                <option value="1" selected="">True</option>
+                <option value="0">False</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label" for="organisation">Organisation</label>
+        <div class="control">
+            <select id="organisation" name="organisation">
+                <option value="1">Create new</option>
+                <option value="John's Space Agency" selected="">John's Space Agency</option>
+                <option value="Jane's Commercial Space Flights">Jane's Commercial Space Flights</option>
+            </select>
+        </div>
+    </div>
+            
+    <div class="field is-grouped">
+        <div class="control">
+            <button class="submit_button_blogs" type="submit">Submit</button>
+        </div>
+    </div>
+</form>
+```
+
+# 'Delete' department (adminstrator, manager kan alleen afdelingen van eigen organisatie verwijderen):
+```
+<form method="POST" action=".../departments/{{ department uuid }}">
+    <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
+    <input type="hidden" name="_method" value="DELETE">            
+    <button type="submit">Delete</button>
+</form>
+```
