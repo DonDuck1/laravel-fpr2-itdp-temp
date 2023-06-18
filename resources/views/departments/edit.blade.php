@@ -39,7 +39,6 @@
                     <label class="label" for="organisation">Organisation</label>
                     <div class="control">
                         <select id="organisation" name="organisation">
-                            <option value="1">Create new</option>
                             @foreach($organisations as $organisation)
                                 @if($department->organisation_id === $organisation->id)
                                     <option value="{{ $organisation->name }}" selected>{{ $organisation->name }}</option>
