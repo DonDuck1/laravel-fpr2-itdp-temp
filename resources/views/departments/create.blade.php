@@ -1,11 +1,11 @@
 <div id="wrapper">
     <div id="page" class="container">
-        <h1>New Organisation</h1>
+        <h1>New Department</h1>
             <form method="POST" action="{{ route('departments.store') }}">
             @csrf
 
             <div class="field">
-                <label class="label" for="name">Organisation name</label>
+                <label class="label" for="name">Department name</label>
                 <div class="control">
                     <input class="input" type="text" name="name" id="name" size="80" value="{{ old('name') }}">
                     @error('name')
@@ -34,10 +34,10 @@
                         <select id="organisation" name="organisation">
                             <option value="" selected disabled hidden>-- Choose an organisation --</option>
                             @foreach($organisations as $organisation)
-                                <option value="{{ $organisation->name }}">{{ $organisation->name }}</option>
+                                <option {{ old('organisation') == $organisation->name ? "selected" : "" }} value="{{ $organisation->name }}">{{ $organisation->name }}</option>
                             @endforeach
                         </select>
-                        @error('active')
+                        @error('organisation')
                             <p>{{ $errors->first('organisation') }}</p>
                         @enderror
                     </div>

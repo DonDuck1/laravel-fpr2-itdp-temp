@@ -6,6 +6,8 @@ use App\Models\Department;
 use App\Models\Organisation;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class DepartmentsController extends Controller
 {
@@ -45,13 +47,21 @@ class DepartmentsController extends Controller
     {
         $this->authorize('create', Department::class);
 
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'active' => ['required', 'boolean'],
-            'organisation' => ['required']
-        ]);
-
         $selectedOrganisation = Organisation::where('name', '=', $request->organisation)->get()->first();
+
+        if(Auth::user()->role_id === Role::IS_ADMIN) {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'active' => ['required', 'boolean'],
+                'organisation' => ['required', ]
+            ]);
+        } else {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'active' => ['required', 'boolean'],
+                'organisation' => ['required', Rule::in([Organisation::where('id', '=', Auth::user()->organisation_id)->get()->first()->name]),]
+            ]);
+        }
 
         Department::create([
             'name' => $request->name,
