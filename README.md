@@ -29,6 +29,12 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 .../ -> hoofdpagina/ welkomspagina. Beschikbaar voor iedereen.
 <br>
 <br>
+.../register -> registreren. Beschikbaar voor administrator.
+<br>
+<br>
+.../profile -> wijzig informatie over eigen account. Beschikbaar voor iedereen voor hun eigen account. Dit is niet aangepast en is volledig zoals laravel breeze het voor me had gemaakt, dus zal ik hier geen manier voor geven om proberen om proberen andere mensen hun accounts te wijzigen of verwijderen (omdat hier ook sprake is van een indirecte verwijzing, er staat geen id/ uuid van het profiel in de URL, zou dit erg moeilijk zijn).
+<br>
+<br>
 .../dashboard -> dashboard. Beschikbaar voor iedereen.
 <br>
 <br>
@@ -79,7 +85,61 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 <br>
 .../departments/8a6ce960-4860-428c-8d78-38fa4013ef24/edit -> wijzig informatie over afdeling 'John's Rocket R&D' van organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort.
 
-# Om de 'store', 'update' en 'delete' routes proberen te bereiken kun je respectievelijk de volgende code toevoegen aan de site via de webeditor:
+# Om de 'store', 'update' en 'delete' routes proberen te bereiken kun je respectievelijk de volgende code toevoegen aan de site via de webeditor. Vergeet daarbij niet de '...' en wat tussen {{}} staat te vervangen met de relevante data.
+# 'Store' user (alleen administrator mag nieuwe gebruikers maken via .../register):
+```
+<form method="POST" action=".../register">
+    <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
+    <!-- Name -->
+    <div>
+        <label class="block font-medium text-sm text-gray-700" for="name">Name</label>
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="name" type="text" name="name" required="required" autofocus="autofocus" autocomplete="name">
+    </div>
+
+    <!-- Organisation -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="organisation">Organisation</label>
+        <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="organisation" name="organisation">
+            <option value="" selected="" disabled="" hidden="">-- Choose an organisation --</option>
+            <option value="John's Space Agency">John's Space Agency</option>
+            <option value="Jane's Commercial Space Flights">Jane's Commercial Space Flights</option>
+        </select>
+    </div>
+
+    <!-- Role -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="role">Role</label>
+        <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="role" name="role">
+            <option value="" selected="" disabled="" hidden="">-- Choose a role --</option>
+            <option value="User">User</option>
+            <option value="Manager">Manager</option>
+            <option value="Administrator">Administrator</option> <!-- Dit staat in de normale register route niet en is via de backend onmogelijk te verwerken -->
+        </select>
+    </div>
+
+    <!-- Email Address -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="email">Email</label>
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="email" type="email" name="email" required="required" autocomplete="username">
+    </div>
+
+    <!-- Password -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="password">Password</label>
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="password" type="password" name="password" required="required" autocomplete="new-password">
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="mt-4">
+        <label class="block font-medium text-sm text-gray-700" for="password_confirmation">Confirm Password</label>
+        <input class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="password_confirmation" type="password" name="password_confirmation" required="required" autocomplete="new-password">
+    </div>
+
+    <div class="flex items-center justify-end mt-4">
+        <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ml-4">Register</button>
+    </div>
+</form>
+```
 # 'Store' organisation (alleen administrator):
 ```
 <form method="POST" action=".../organisations">
