@@ -21,6 +21,20 @@
             <x-input-error :messages="$errors->get('organisation')" class="mt-2" />
         </div>
 
+        <!-- Organisation -->
+        <div class="mt-4">
+            <x-input-label for="role" :value="__('Role')" />
+            <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full" id="role" name="role">
+                <option value="" selected disabled hidden>-- Choose a role --</option>
+                @foreach($roles as $role)
+                    @if($role->id !== App\Models\Role::IS_ADMIN)
+                        <option {{ old('role') == $role->name ? "selected" : "" }} value="{{ $role->name }}">{{ $role->name }}</option>
+                    @endif
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
