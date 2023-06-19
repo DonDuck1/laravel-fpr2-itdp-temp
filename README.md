@@ -6,6 +6,19 @@
 ## Instructies
 Snooping en session hijacking worden voorkomen door gebruik te maken van HTTPS en TLS (oftewel er wordt gebruikgemaakt van een 'SSL Certificate')
 
+IDOR is via policies en @can in de blade files toegepast. Ook ben ik niet vergeten in de back-end bij de controllers ook van de policies gebruik te maken. Voor extra bescherming heb ik in plaats van 'id's als primary keys te gebruiken in sommige tables die met CRUD zijn betrokken heb ik 'uuid's gebruikt. Dit zijn willekeurige 'string's van een bepaalde lengte. Hierdoor wordt het raden naar een andere afdeling wanneer je op de 'show' pagina van de afdeling zit lastig. Bijvoorbeeld in plaats van:
+<br>
+.../departments/1
+<br>
+.../departments/2
+<br>
+Gebruik ik:
+<br>
+.../departments/02a11954-5a03-4c26-9bd1-21e06cf27d1b
+<br>
+.../departments/349a5e02-10fc-4bbc-b583-c9b59095b2ce
+<br>
+
 Er zijn 3 rollen: 'Administrator', 'Manager' en 'User'. De rechten van elke gebruiker (zoals het zou moeten zijn):
 Iemand met de rol 'Administrator' heeft het recht om:
 - Nieuwe gebruikers te registreren. Ze kunnen echter niet nieuwe gebruikers de rol 'Administrator' geven, dat zou moeten via de database. Ook kunnen ze accounts niet aanpassen na aanmaak (behalve via de database) en kunnen ze ze niet verwijderen (behalve via de database).
@@ -29,7 +42,7 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 .../ -> hoofdpagina/ welkomspagina. Beschikbaar voor iedereen.
 <br>
 <br>
-.../register -> registreren. Beschikbaar voor administrator.
+.../register -> registreren van nieuwe gebruikers. Beschikbaar voor administrator.
 <br>
 <br>
 .../profile -> wijzig informatie over eigen account. Beschikbaar voor iedereen voor hun eigen account. Dit is niet aangepast en is volledig zoals laravel breeze het voor me had gemaakt, dus zal ik hier geen manier voor geven om proberen om proberen andere mensen hun accounts te wijzigen of verwijderen (omdat hier ook sprake is van een indirecte verwijzing, er staat geen id/ uuid van het profiel in de URL, zou dit erg moeilijk zijn).
