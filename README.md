@@ -19,6 +19,38 @@ Gebruik ik:
 .../departments/349a5e02-10fc-4bbc-b583-c9b59095b2ce
 <br>
 
+Ik heb al 5 verschillende gebruikers aangemaakt. Dit zijn:
+<br>
+email = beheerder@beheerder.com
+<br>
+password = DonaldDuck1234!
+<br>
+role: Administrator
+
+email = john@john.com
+<br>
+password = DagobertDuck1234!
+<br>
+role: Manager
+
+email = jane@jane.com
+<br>
+password = KnappeKitty1234!
+<br>
+role: Manager
+
+email = johnjr@john.com
+<br>
+password = Kwik,KwekEnKwak1234!
+<br>
+role: User
+
+email = janejr@jane.com
+<br>
+password = Floortje1234!
+<br>
+role: User
+
 Er zijn 3 rollen: 'Administrator', 'Manager' en 'User'. De rechten van elke gebruiker (zoals het zou moeten zijn):
 Iemand met de rol 'Administrator' heeft het recht om:
 - Nieuwe gebruikers te registreren. Ze kunnen echter niet nieuwe gebruikers de rol 'Administrator' geven, dat zou moeten via de database. Ook kunnen ze accounts niet aanpassen na aanmaak (behalve via de database) en kunnen ze ze niet verwijderen (behalve via de database).
