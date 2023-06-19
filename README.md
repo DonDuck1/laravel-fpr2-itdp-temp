@@ -3,7 +3,7 @@
 ## Auteurs
 * **Joan Maljers** - *De site laten werken, inclusief IDOR toevoegen* - [Joan Maljers](https://github.com/DonDuck1)
 
-## Instructies
+## Uitleg van features
 Snooping en session hijacking worden voorkomen door gebruik te maken van HTTPS en TLS (oftewel er wordt gebruikgemaakt van een 'SSL Certificate')
 
 IDOR is via policies en @can in de blade files toegepast. Ook ben ik niet vergeten in de back-end bij de controllers ook van de policies gebruik te maken. Voor extra bescherming heb ik in plaats van 'id's als primary keys te gebruiken in sommige tables die met CRUD zijn betrokken heb ik 'uuid's gebruikt. Dit zijn willekeurige 'string's van een bepaalde lengte. Hierdoor wordt het raden naar een andere afdeling wanneer je op de 'show' pagina van de afdeling zit lastig. Bijvoorbeeld in plaats van:
@@ -19,6 +19,7 @@ Gebruik ik:
 .../departments/349a5e02-10fc-4bbc-b583-c9b59095b2ce
 <br>
 
+## Gebruikers
 Ik heb al 5 verschillende gebruikers aangemaakt. Dit zijn:
 <br>
 email = beheerder@beheerder.com
@@ -51,6 +52,7 @@ password = Floortje1234!
 <br>
 role: User
 
+## Rollen
 Er zijn 3 rollen: 'Administrator', 'Manager' en 'User'. De rechten van elke gebruiker (zoals het zou moeten zijn):
 Iemand met de rol 'Administrator' heeft het recht om:
 - Nieuwe gebruikers te registreren. Ze kunnen echter niet nieuwe gebruikers de rol 'Administrator' geven, dat zou moeten via de database. Ook kunnen ze accounts niet aanpassen na aanmaak (behalve via de database) en kunnen ze ze niet verwijderen (behalve via de database).
@@ -65,6 +67,7 @@ Iemand met de rol 'User' heeft het recht om:
 - De bestaande organisatie waar hij bij hoort bekijken.
 - De bestaande afdelingen die horen bij zijn organisatie bekijken.
 
+## Links
 Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net vers is gemigrate en geseed, en wat de links inhouden en voor wie ze beschikbaar zijn. '...' is de link naar de hoofdpagina/ welkomspagina van mijn site. Om IDOR aan te tonen kun je deze links in de zoekbalk van de browser plakken wanneer je bent ingelogd als verschillende gebruikers.
 <br>
 <br>
@@ -130,8 +133,8 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 <br>
 .../departments/8a6ce960-4860-428c-8d78-38fa4013ef24/edit -> wijzig informatie over afdeling 'John's Rocket R&D' van organisatie 'John's Space Agency'. Beschikbaar voor administrator, manager van de organisatie waar deze afdeling bij hoort.
 
-# Om de 'store', 'update' en 'delete' routes proberen te bereiken kun je respectievelijk de volgende code toevoegen aan de site via de webeditor. Vergeet daarbij niet de '...' en wat tussen {{}} staat te vervangen met de relevante data.
-# 'Store' user (alleen administrator mag nieuwe gebruikers maken via .../register):
+## Om de 'store', 'update' en 'delete' routes proberen te bereiken kun je respectievelijk de volgende code toevoegen aan de site via de webeditor. Vergeet daarbij niet de '...' en wat tussen {{}} staat te vervangen met de relevante data.
+### 'Store' user (alleen administrator mag nieuwe gebruikers maken via .../register):
 ```
 <form method="POST" action=".../register">
     <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
@@ -185,7 +188,7 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
     </div>
 </form>
 ```
-# 'Store' organisation (alleen administrator):
+### 'Store' organisation (alleen administrator):
 ```
 <form method="POST" action=".../organisations">
     <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
@@ -214,7 +217,7 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 </form>
 ```
 
-# 'Update' organisation (adminstrator, manager kan alleen van zijn eigen organisatie info wijzigen):
+### 'Update' organisation (adminstrator, manager kan alleen van zijn eigen organisatie info wijzigen):
 ```
 <form method="POST" action=".../organisations/{{ organisation uuid }}">
     <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
@@ -244,7 +247,7 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 </form>
 ```
 
-# 'Delete' organisation (alleen administrator):
+### 'Delete' organisation (alleen administrator):
 ```
 <form method="POST" action=".../organisations/{{ organisation uuid }}">
     <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
@@ -253,7 +256,7 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 </form>
 ```
 
-# 'Store' department (adminstrator, manager kan alleen afdelingen bij eigen organisatie toevoegen):
+### 'Store' department (adminstrator, manager kan alleen afdelingen bij eigen organisatie toevoegen):
 ```
 <form method="POST" action=".../public/departments">
     <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
@@ -294,7 +297,7 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 </form>
 ```
 
-# 'Update' department (adminstrator, manager kan alleen afdelingen van eigen organisatie wijzigen):
+### 'Update' department (adminstrator, manager kan alleen afdelingen van eigen organisatie wijzigen):
 ```
 <form method="POST" action=".../departments/{{ department uuid }}">
     <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
@@ -335,7 +338,7 @@ Ik zal nu alle links geven die beschikbaar zijn voor de website wanneer hij net 
 </form>
 ```
 
-# 'Delete' department (adminstrator, manager kan alleen afdelingen van eigen organisatie verwijderen):
+### 'Delete' department (adminstrator, manager kan alleen afdelingen van eigen organisatie verwijderen):
 ```
 <form method="POST" action=".../departments/{{ department uuid }}">
     <input type="hidden" name="_token" value="{{ Deze value is te vinden door bijvoorbeeld als manager naar een department te gaan en via de webeditor de value van de delete knop daar opzoeken }}">
